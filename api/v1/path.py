@@ -1,3 +1,4 @@
+from datetime import date
 from fastapi import APIRouter,HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session as S
@@ -5,7 +6,6 @@ from db import Session
 from models.user import User
 
 class Item(BaseModel):
-    id: int
     name: str
 
 def get_db():
@@ -23,7 +23,7 @@ folder_router = APIRouter()
 @folder_router.post("/items/")
 async def create_item(item: Item):
     db:S= get_db()
-    db_user = User(id=item.id, name=item.name)
+    db_user = User(name=item.name)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
